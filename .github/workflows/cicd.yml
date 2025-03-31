@@ -1,0 +1,30 @@
+name: 🚀 Auto Deploy to EC2 (Luckyday)
+
+on:
+  push:
+    branches: [ main, develop ]
+
+jobs:
+  deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main repo with submodules
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: 🔐 Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            cd ~/luckyday-server
+            git pull origin main
+            git submodule sync
+            git submodule update --remote --merge
+            chmod +x deploy.sh
+            ./deploy.sh
