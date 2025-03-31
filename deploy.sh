@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e  # 에러 발생 시 즉시 스크립트 종료
 
 echo "📥 Pulling latest code..."
 git pull origin main
