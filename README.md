@@ -1,7 +1,7 @@
 # luckyday-server
 
 > **행운이 가득한 하루, 클로버로 이어지는 SNS**
-> **SNS 풀스택 프로젝트 `luckyday`의 통합 레포지토리입니다.**  
+> **풀스택 프로젝트 `luckyday`의 통합 레포지토리입니다.**  
 > React + Spring Boot + Docker + GitHub Actions 기반으로 개발되었습니다.
 
 ---
