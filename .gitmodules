@@ -1,0 +1,8 @@
+[submodule "luckyday-backend"]
+	path = luckyday-backend
+	url = https://github.com/kcrt1020/luckyday-backend.git
+	branch = main
+[submodule "luckyday-frontend"]
+	path = luckyday-frontend
+	url = https://github.com/kcrt1020/luckyday-frontend.git
+	branch = main
