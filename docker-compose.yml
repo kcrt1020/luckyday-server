@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8
+    container_name: luckyday-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: luckyday_db
+      MYSQL_USER: luckydaydb
+      MYSQL_PASSWORD: luckydaydb
+      TZ: Asia/Seoul
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql-conf:/etc/mysql/conf.d
+      - mysql_data:/var/lib/mysql
+    networks:
+      - luckyday-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./luckyday-backend
+    image: luckyday-backend
+    container_name: luckyday-backend
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: prod  # prod profile 사용
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/luckyday_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+      SPRING_DATASOURCE_USERNAME: luckydaydb
+      SPRING_DATASOURCE_PASSWORD: luckydaydb
+      FILE_UPLOAD_DIR: /app/uploads
+    ports:
+      - "8080:8080"  # 외부에서 API 접근 가능하게 포트 열어줌
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./uploads:/app/uploads
+    networks:
+      - luckyday-network
+
+  frontend:
+    build: ./luckyday-frontend
+    image: luckyday-frontend
+    container_name: luckyday-frontend
+    restart: always
+    ports:
+      - "5173:80"  # ✅ Nginx 80포트를 외부 5173으로 연결
+    depends_on:
+      - backend
+    networks:
+      - luckyday-network
+
+volumes:
+  mysql_data:
+
+networks:
+  luckyday-network:
+    name: luckyday-network
+    driver: bridge
