@@ -14,6 +14,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🔐 Deploy via SSH
         uses: appleboy/ssh-action@v1.0.0
