@@ -1,14 +1,17 @@
 #!/bin/bash
-set -e  # 에러 발생 시 즉시 스크립트 종료
+set -e
+trap 'echo "❌ 에러 발생. 배포 중단됨."' ERR
 
-echo "📥 Pulling latest code..."
-git pull origin main
+BRANCH=${1:-main}
+
+echo "📥 Pulling latest code from branch: $BRANCH"
+git pull origin $BRANCH
 git submodule sync
 git submodule update --remote --merge
 
 echo "🐳 Restarting Docker..."
-docker-compose down
-docker-compose build
-docker-compose up -d
+docker compose down --remove-orphans
+docker compose build --no-cache
+docker compose up -d
 
 echo "✅ 배포 완료!"
