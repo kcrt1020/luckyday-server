@@ -12,7 +12,7 @@ services:
       MYSQL_PASSWORD: luckydaydb
       TZ: Asia/Seoul
     ports:
-      - "0.0.0.0:3380:3306"
+      - "3380:3306"
     volumes:
       - ./mysql-conf:/etc/mysql/conf.d
       - mysql_data:/var/lib/mysql
@@ -36,7 +36,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: luckydaydb
       FILE_UPLOAD_DIR: /app/uploads
     ports:
-      - "127.0.0.1:8081:8080"
+      - "8081:8080"
     depends_on:
       db:
         condition: service_healthy
