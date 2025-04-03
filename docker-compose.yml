@@ -51,9 +51,25 @@ services:
     container_name: luckyday-frontend
     restart: always
     ports:
-      - "80:80"  # ✅ Nginx 80포트를 외부 80으로 연결
+      - "80:80"
+      - "443:443"  # ✅ HTTPS 포트 열기
+    volumes:
+      - ./uploads:/app/uploads
+      - ./nginx/conf.d:/etc/nginx/conf.d  # ✅ nginx 설정
+      - ./certbot/conf:/etc/letsencrypt   # ✅ 인증서 경로 공유
+      - ./certbot/www:/var/www/certbot
     depends_on:
       - backend
+    networks:
+      - luckyday-network
+
+  certbot:
+    image: certbot/certbot
+    container_name: luckyday-certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: /bin/sh -c "trap exit TERM; while :; do sleep 1; done"
     networks:
       - luckyday-network
 
