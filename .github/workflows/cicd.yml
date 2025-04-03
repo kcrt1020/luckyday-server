@@ -13,7 +13,7 @@ jobs:
       - name: Checkout main repo with submodules
         uses: actions/checkout@v3
         with:
-          submodules: recursive
+          submodules: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🔐 Deploy via SSH
