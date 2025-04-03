@@ -1,0 +1,10 @@
+# certbot 인증서 관련 민감 정보는 git에 올리지 않음
+certbot/conf/*
+!certbot/conf/options-*.ini
+!certbot/conf/ssl-dhparams.pem
+
+# 로그, 빌드 결과물, IDE 설정 파일 등도 추가 가능
+*.log
+node_modules/
+build/
+.env
